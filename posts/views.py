@@ -1,12 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import PostModelForm
-<<<<<<< HEAD
-<<<<<<< HEAD
 from .models import Post
-=======
->>>>>>> b5436e9d3d9f93fa3c0e5215ab95dfceb90a4dd6
-=======
->>>>>>> b5436e9d3d9f93fa3c0e5215ab95dfceb90a4dd6
 
 # Create your views here.
 def create(request):
@@ -15,22 +9,12 @@ def create(request):
         form = PostModelForm(request.POST)
         if form.is_valid() :
             form.save()
-<<<<<<< HEAD
-<<<<<<< HEAD
             return redirect('posts:list')
-=======
-            return redirect('post:create')
->>>>>>> b5436e9d3d9f93fa3c0e5215ab95dfceb90a4dd6
-=======
-            return redirect('post:create')
->>>>>>> b5436e9d3d9f93fa3c0e5215ab95dfceb90a4dd6
     else :
         # post를 작성하는 form을 보여 줌
         form = PostModelForm()
         return render(request, 'posts/create.html', {'form': form})
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 def list(request) :
     posts = Post.objects.all()
     return render(request,'posts/list.html', {'posts' : posts})
@@ -55,7 +39,4 @@ def update(request, id) :
     
     form = PostModelForm(instance=post)
     return render(request,'posts/update.html',{'form': form})
-=======
->>>>>>> b5436e9d3d9f93fa3c0e5215ab95dfceb90a4dd6
-=======
->>>>>>> b5436e9d3d9f93fa3c0e5215ab95dfceb90a4dd6
+
