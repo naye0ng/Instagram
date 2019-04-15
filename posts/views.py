@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PostModelForm
 from .models import Post
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
 # Create your views here.
 def create(request):
@@ -20,7 +21,6 @@ def create(request):
 
 def list(request) :
     posts = Post.objects.all()
-    print(posts)
     return render(request,'posts/list.html', {'posts' : posts})
     
 def delete(request, id) :
