@@ -11,4 +11,4 @@ class PostModelForm(forms.ModelForm):
     # 2. 해당 input
     class Meta :
         model = Post
-        fields = ['content']
+        fields = ['content','image']
