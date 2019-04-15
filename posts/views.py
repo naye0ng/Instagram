@@ -20,6 +20,7 @@ def create(request):
 
 def list(request) :
     posts = Post.objects.all()
+    print(posts)
     return render(request,'posts/list.html', {'posts' : posts})
     
 def delete(request, id) :

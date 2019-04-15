@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 def login(request) :
@@ -33,3 +33,9 @@ def signup(request) :
     else :
         form = UserCreationForm() 
     return render(request, 'accounts/signup.html', {'form': form})
+    
+# 사용자 개인페이지
+def people(request,username) :
+    # 사용자에 대한 정보 
+    people = get_object_or_404(get_user_model(),username=username)
+    return render(request, 'accounts/people.html', {'people': poeple})
