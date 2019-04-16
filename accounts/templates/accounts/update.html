@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block body %}
+<h1 class='text-center'>회원정보</h1>
+<form method='POST'>
+  {% csrf_token %}
+  <!-- 모델 폼 -->
+  {% bootstrap_form user_change_form %}
+
+  <button type='submit' class='btn btn-primary'>정보수정</button>
+</form>
+{% endblock %}

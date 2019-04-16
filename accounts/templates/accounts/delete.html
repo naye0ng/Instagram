@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block body %}
+<h1 class='text-center'>회원탈퇴</h1>
+<form method='POST'>
+  {% csrf_token %}
+  <p>정말로 탈퇴하시겠습니까?ㅠㅠ</p>
+  <button type='submit' class='btn btn-danger'>미안하다</button>
+</form>
+{% endblock %}

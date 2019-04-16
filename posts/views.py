@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 from .forms import PostModelForm, CommentModelForm
 from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
@@ -61,8 +62,8 @@ def like(request, post_id):
     
     
 @login_required
+@require_POST
 def create_comment(request, post_id):
-    # post = get_object_or_404(Post,pk=post_id)
     
     form = CommentModelForm(request.POST)
     if form.is_valid() :
