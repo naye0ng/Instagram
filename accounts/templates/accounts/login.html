@@ -4,7 +4,7 @@
 
 {% block body %}
 <h1 class='text-center'>로그인</h1>
-<form method='POST' >
+<form method='POST'>
   {% csrf_token %}
   <!-- 모델 폼 -->
   {% bootstrap_form form %}

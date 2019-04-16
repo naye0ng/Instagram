@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Comment
 
 # Post라는 모델을 조작할 수 있는 PostModelForm을 정의
 class PostModelForm(forms.ModelForm):
@@ -12,3 +12,9 @@ class PostModelForm(forms.ModelForm):
     class Meta :
         model = Post
         fields = ['content','image']
+
+
+class CommentModelForm(forms.ModelForm):
+    class Meta :
+        model = Comment
+        fields = ['content']

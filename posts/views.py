@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import PostModelForm
-from .models import Post
+from .forms import PostModelForm, CommentModelForm
+from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
@@ -21,7 +21,8 @@ def create(request):
 
 def list(request) :
     posts = Post.objects.all()
-    return render(request,'posts/list.html', {'posts' : posts})
+    commentForm = CommentModelForm()
+    return render(request,'posts/list.html', {'posts' : posts, 'commentForm':commentForm})
     
 def delete(request, id) :
     post = get_object_or_404(Post, pk=id)
@@ -57,3 +58,23 @@ def like(request, post_id):
     return redirect('posts:list')
         
     # 아니라면, like를 추가한다.
+    
+    
+@login_required
+def create_comment(request, post_id):
+    # post = get_object_or_404(Post,pk=post_id)
+    
+    form = CommentModelForm(request.POST)
+    if form.is_valid() :
+        comment = form.save(commit=False)
+        comment.post_id = post_id
+        comment.user = request.user
+        comment.save()
+    
+    return redirect('posts:list')
+
+def delete_comment(request, comment_id) :
+    comment = get_object_or_404(Comment, pk=comment_id)
+    comment.delete()
+    
+    return redirect('posts:list')
