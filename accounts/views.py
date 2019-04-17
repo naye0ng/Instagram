@@ -3,7 +3,8 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, User
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import get_user_model, update_session_auth_hash
-from .forms import CustomUserChangeForm
+from .forms import CustomUserChangeForm, ProfileForm
+from .models import Profile
 
 # Create your views here.
 def login(request) :
@@ -27,8 +28,8 @@ def signup(request) :
         form = UserCreationForm(request.POST)
         if form.is_valid() :
             user = form.save()
-            # 로그인처리까지하는데 이때 들어오는 password값은 2개가 들어오므로 user에서 받아온 결과물로 로그인 처리하자
-            # auth_login(request, request.POST)
+            # 매 회원가입때마다 profile 테이블도 생성
+            Profile.objects.create(user=user)
             auth_login(request, user)
             return redirect('posts:list')
     else :
@@ -45,18 +46,24 @@ def people(request,username) :
 def update(request) :
     if request.method == 'POST' :
         user_change_form = CustomUserChangeForm(request.POST, instance=request.user)
-        if user_change_form.is_valid() :
+        profile_form = ProfileForm(request.POST, instance=request.user.profile)
+
+        if user_change_form.is_valid() and profile_form.is_valid() :
             # 객체가 저장되고 난 후의 값을 반환한다.
            user = user_change_form.save()
-           return redirect('people', user.name)
+           profile_form.save()
+           return redirect('people', user.username)
         
     else :
         # 변경될 사용자의 정보를 같이 넘겨줘야 한다.
         user_change_form = CustomUserChangeForm(instance=request.user)
-        # passwd_change_form = PasswordChangeForm(request.user)
+        # instance에 넣어줄 정보가 있는 user도 있고, 없는 user도 있다.
+        profile, create = Profile.objects.get_or_create(user = request.user)
+        profile_form = ProfileForm(instance=profile)
+        
         context={
             'user_change_form' : user_change_form,
-            
+            'profile_form' : profile_form,
         }
         return render(request,'accounts/update.html',context)
     
