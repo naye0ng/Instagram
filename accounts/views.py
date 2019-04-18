@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, User
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import get_user_model, update_session_auth_hash
-from .forms import CustomUserChangeForm, ProfileForm
+from .forms import CustomUserChangeForm, ProfileForm, CustomUserCreationForm
 from .models import Profile
 
 # Create your views here.
@@ -25,7 +25,7 @@ def logout(request) :
 
 def signup(request) :
     if request.method == "POST" :
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid() :
             user = form.save()
             # 매 회원가입때마다 profile 테이블도 생성
@@ -33,7 +33,7 @@ def signup(request) :
             auth_login(request, user)
             return redirect('posts:list')
     else :
-        form = UserCreationForm() 
+        form = CustomUserCreationForm() 
     return render(request, 'accounts/signup.html', {'form': form})
     
 # 사용자 개인페이지
@@ -46,7 +46,7 @@ def people(request,username) :
 def update(request) :
     if request.method == 'POST' :
         user_change_form = CustomUserChangeForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
+        profile_form = ProfileForm(request.POST,request.FILES, instance=request.user.profile)
 
         if user_change_form.is_valid() and profile_form.is_valid() :
             # 객체가 저장되고 난 후의 값을 반환한다.
@@ -86,5 +86,15 @@ def delete(request) :
         request.user.delete()
         return redirect('accounts:signup')
     return render(request,'accounts/delete.html')
+    
+def follow(request, user_id) :
+    person = get_object_or_404(get_user_model(), pk=user_id)
+    # 만약 현재 유저(request.user)가 해당유저(user)를 팔로잉하고 있었다면, 팔로우 취소
+    if request.user in person.followers.all() :
+        person.followers.remove(user=request.user) 
+    else :
+        person.followers.add(request.user)
+    return redirect('people', person.username)
+    
     
     

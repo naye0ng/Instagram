@@ -4,7 +4,7 @@
 
 {% block body %}
 <h1 class='text-center'>회원정보</h1>
-<form method='POST'>
+<form method='POST' enctype='multipart/form-data'>
   {% csrf_token %}
   <!-- 모델 폼 -->
   {% bootstrap_form user_change_form %}

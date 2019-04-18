@@ -11,7 +11,8 @@
       {% if user.is_authenticated %}
       <!-- 만약 로그인이 되어 있다면-->
       <a class="nav-item nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
-      <a class="nav-item nav-link" href="/{{user.username}}">{{user.username }} </a>
+      <a class="nav-item nav-link" href="{% url 'people' user.username %}">{{user.username }} </a>
+      <a class="nav-item nav-link" href="{% url  'posts:create' %}">새글쓰기</a>
       {% else %}
       <a class="nav-item nav-link" href="{% url 'accounts:login' %}">로그인</a>
       <a class="nav-item nav-link" href="{% url 'accounts:signup' %}">회원가입</a>

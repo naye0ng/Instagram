@@ -8,7 +8,7 @@
       <div class="card" style="width: 40rem;">
        <!--https://picsum.photos/300/300-->
       <img src="{{ post.image.url }}" class="card-img-top" alt="...">
-
+      <a href="{% url 'people' post.user %}">{{ post.user }}</a>
       <div class="card-body">
         <p class="card-text">{{ post.content }}</p>
         <form method='POST' action="{% url 'posts:delete' post.id %}">

@@ -4,6 +4,7 @@ from .forms import PostModelForm, CommentModelForm
 from .models import Post, Comment
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.db.models import Q
 
 # Create your views here.
 def create(request):
@@ -21,7 +22,16 @@ def create(request):
         return render(request, 'posts/create.html', {'form': form})
 
 def list(request) :
-    posts = Post.objects.all()
+    posts = []
+    if not request.user.is_anonymous :
+        # 내가 팔로우한 사람들의 post를 보여준다.
+        # follow_posts = Post.objects.filter(user_id__in= request.user.followings.all())
+    
+        # (+) 내가 쓴 post 목록을 보여준다.
+        # my_posts = request.user.post_set.all()
+        # posts = follow_posts | my_posts
+        posts = Post.objects.filter(Q(user_id__in= request.user.followings.all()) | Q(user=request.user))
+
     commentForm = CommentModelForm()
     return render(request,'posts/list.html', {'posts' : posts, 'commentForm':commentForm})
     
